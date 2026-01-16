@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
+      title="msg://metaFieldListView.title"
+      focusComponent="metaFieldsDataGrid">
+    <data>
+        <collection id="metaFieldsDc"
+                    class="com.company.treelogic.entity.MetaField">
+            <fetchPlan extends="_base">
+                <property name="parent"/>
+            </fetchPlan>
+            <loader id="metaFieldsDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from MetaField e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <genericFilter component="genericFilter"/>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <layout>
+        <genericFilter id="genericFilter"
+                       dataLoader="metaFieldsDl">
+            <properties include=".*"/>
+        </genericFilter>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <startSlot>
+                <button id="createButton" action="metaFieldsDataGrid.createAction"/>
+                <button id="editButton" action="metaFieldsDataGrid.editAction"/>
+                <button id="removeButton" action="metaFieldsDataGrid.removeAction"/>
+
+                <!-- NÚT LOGIC CHECKBOX -->
+                <button id="selectWithChildrenBtn" text="Chọn kèm con"/>
+                <button id="deselectWithChildrenBtn" text="Bỏ kèm con"/>
+            </startSlot>
+            <endSlot>
+                <simplePagination id="pagination" dataLoader="metaFieldsDl"/>
+            </endSlot>
+        </hbox>
+        <treeDataGrid id="metaFieldsDataGrid"
+                      width="100%"
+                      minHeight="20em"
+                      dataContainer="metaFieldsDc"
+                      hierarchyProperty="parent"
+                      columnReorderingAllowed="true"
+                      selectionMode="MULTI"
+        >
+        <actions>
+            <action id="createAction" type="list_create"/>
+            <action id="editAction" type="list_edit"/>
+            <action id="removeAction" type="list_remove"/>
+        </actions>
+        <columns resizable="true">
+            <column property="name"/>
+            <column property="description"/>
+        </columns>
+    </treeDataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction"/>
+            <button id="discardButton" action="discardAction"/>
+        </hbox>
+    </layout>
+</view>

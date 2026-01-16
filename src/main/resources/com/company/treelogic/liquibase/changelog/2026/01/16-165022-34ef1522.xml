@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="TreeLogic">
+        <createTable tableName="META_FIELD">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_META_FIELD"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)"/>
+            <column name="DESCRIPTION" type="VARCHAR(255)"/>
+            <column name="PARENT_ID" type="UUID"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="TreeLogic">
+        <createIndex indexName="IDX_META_FIELD_PARENT" tableName="META_FIELD">
+            <column name="PARENT_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="PARENT_ID" baseTableName="META_FIELD"
+                                 constraintName="FK_META_FIELD_ON_PARENT" referencedColumnNames="ID"
+                                 referencedTableName="META_FIELD"/>
+    </changeSet>
+</databaseChangeLog>
