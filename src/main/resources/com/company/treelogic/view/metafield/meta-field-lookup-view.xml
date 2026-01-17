@@ -38,6 +38,8 @@
                 <button id="createButton" action="metaFieldsDataGrid.createAction"/>
                 <button id="editButton" action="metaFieldsDataGrid.editAction"/>
                 <button id="removeButton" action="metaFieldsDataGrid.removeAction"/>
+                <button id="onlyIncludedBtn" text="Only included" icon="FILTER"/>
+
             </startSlot>
             <endSlot>
                 <simplePagination id="pagination" dataLoader="metaFieldsDl"/>
