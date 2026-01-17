@@ -11,29 +11,51 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Generic handler xử lý logic Checkbox đệ quy trên TreeDataGrid (Boolean Column).
+ * Generic Handler xử lý logic Checkbox đệ quy trên TreeDataGrid (cho cột Boolean tùy chỉnh).
  * <p>
- * Logic hoạt động:
- * - Tích cha: tự động tích tất cả con cháu.
- * - Tích con: tự động tích ngược lên cha, ông.
- * - Bỏ tích cha: tự động bỏ tích tất cả con cháu.
- * - Bỏ tích con: chỉ bỏ tích cha nếu TẤT CẢ anh em khác đều không được chọn.
- * <p>
- * Sử dụng trong Renderer:
- * <pre>{@code
- * TreeCheckboxHandler<MetaField> handler = new TreeCheckboxHandler<>(
- *     treeDataGrid,
- *     metaFieldsDc,
- *     MetaField::getParent,
- *     MetaField::getIncluded,
- *     MetaField::setIncluded
- * );
+ * <strong>Logic hoạt động:</strong>
+ * <ul>
+ *   <li>Tích cha &rarr; Tự động tích tất cả con cháu.</li>
+ *   <li>Tích con &rarr; Tự động tích ngược lên cha, ông (đánh dấu nhánh được chọn).</li>
+ *   <li>Bỏ tích cha &rarr; Tự động bỏ tích tất cả con cháu.</li>
+ *   <li>Bỏ tích con &rarr; Chỉ bỏ tích cha nếu <b>TẤT CẢ</b> anh em khác đều không được chọn.</li>
+ * </ul>
  *
- * // Trong ValueChangeListener của Checkbox:
- * handler.onItemCheckedChange(item, event.getValue());
+ * <strong>Cách sử dụng:</strong>
+ * <pre>{@code
+ * // 1. Khai báo biến trong Controller
+ * private TreeCheckboxHandler<MetaField> treeCheckboxHandler;
+ *
+ * // 2. Khởi tạo trong onInit
+ * @Subscribe
+ * public void onInit(final InitEvent event) {
+ *     treeCheckboxHandler = new TreeCheckboxHandler<>(
+ *         metaFieldsDataGrid,      // Grid hiển thị
+ *         metaFieldsDc,            // Container dữ liệu
+ *         MetaField::getParent,    // Hàm lấy cha
+ *         MetaField::getIncluded,  // Hàm lấy giá trị boolean
+ *         MetaField::setIncluded   // Hàm set giá trị boolean
+ *     );
+ * }
+ *
+ * // 3. Gọi trong Renderer (cho cột checkbox)
+ * @Supply(to = "metaFieldsDataGrid.included", subject = "renderer")
+ * private Renderer<MetaField> includedRenderer() {
+ *     return new ComponentRenderer<>(item -> {
+ *         JmixCheckbox checkbox = uiComponents.create(JmixCheckbox.class);
+ *         checkbox.setValue(Boolean.TRUE.equals(item.getIncluded()));
+ *
+ *         checkbox.addValueChangeListener(e -> {
+ *             // GỌI HÀM NÀY ĐỂ XỬ LÝ LOGIC:
+ *             boolean isChecked = Boolean.TRUE.equals(e.getValue());
+ *             treeCheckboxHandler.onItemCheckedChange(item, isChecked);
+ *         });
+ *         return checkbox;
+ *     });
+ * }
  * }</pre>
  *
- * @param <T> Entity type
+ * @param <T> Kiểu Entity (Ví dụ: MetaField)
  */
 public class TreeCheckboxHandler<T> {
 
