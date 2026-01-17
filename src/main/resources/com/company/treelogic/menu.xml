@@ -4,6 +4,7 @@
     <menu id="application" title="msg://com.company.treelogic/menu.application.title" opened="true">
         <item view="User.list" title="msg://com.company.treelogic.view.user/UserListView.title"/>
         <item view="MetaField.list" title="msg://com.company.treelogic.view.metafield/metaFieldListView.title"/>
+        <item view="MetaField.lookup" title="msg://com.company.treelogic.view.metafield/metaFieldLookUpView.title"/>
     </menu>
 
 </menu-config>

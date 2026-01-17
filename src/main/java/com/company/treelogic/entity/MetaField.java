@@ -3,6 +3,7 @@ package com.company.treelogic.entity;
 import io.jmix.core.entity.annotation.JmixGeneratedValue;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
+import io.jmix.core.metamodel.annotation.JmixProperty;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -18,6 +19,10 @@ public class MetaField {
     @Id
     private UUID id;
 
+    @JmixProperty
+    @Transient
+    private Boolean included;
+
     @InstanceName
     @Column(name = "NAME")
     private String name;
@@ -28,6 +33,14 @@ public class MetaField {
     @JoinColumn(name = "PARENT_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private MetaField parent;
+
+    public Boolean getIncluded() {
+        return included;
+    }
+
+    public void setIncluded(Boolean included) {
+        this.included = included;
+    }
 
     public MetaField getParent() {
         return parent;
